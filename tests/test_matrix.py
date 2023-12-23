@@ -213,6 +213,73 @@ def test_matrix_cofactor():
     assert m.cofactor(1, 0) == -25
 
 
+@task  
+def test_matrix_determinant_3x3():
+    m = Matrix(
+        3,
+        3,
+        [
+            [1, 2, 6],
+            [-5, 8, -4],
+            [2, 6, 4],
+        ],
+    )
+    assert m.cofactor(0, 0) == 56
+    assert m.cofactor(0, 1) == 12
+    assert m.cofactor(0, 2) == -46
+    assert m.determinant() == -196
+
+
+@task
+def test_matrix_determinant_4x4():
+    m = Matrix(
+        4,
+        4,
+        [
+            [-2, -8, 3, 5],
+            [-3, 1, 7, 3],
+            [1, 2, -9, 6],
+            [-6, 7, 7, -9],
+        ],
+    )
+    assert m.cofactor(0, 0) == 690
+    assert m.cofactor(0, 1) == 447
+    assert m.cofactor(0, 2) == 210
+    assert m.cofactor(0, 3) == 51
+    assert m.determinant() == -4071 
+
+
+@task
+def test_matrix_invertibility():
+    m = Matrix(
+        4,
+        4,
+        [
+            [6, 4, 4, 4],
+            [5, 5, 7, 6],
+            [4, -9, 3, -7],
+            [9, 1, 7, -6],
+        ],
+    )
+    assert m.determinant() == -2120
+    assert m.is_invertible()
+
+
+@task
+def test_matrix_noninvertibility():
+    m = Matrix(
+        4,
+        4,
+        [
+            [-4, 2, -2, -3],
+            [9, 6, 2, 6],
+            [0, -5, 1, -5],
+            [0, 0, 0, 0],
+        ],
+    )
+    assert m.determinant() == 0
+    assert not m.is_invertible()
+
 @flow(task_runner=RayTaskRunner(init_kwargs={"num_cpus": NUM_CPUS}))
 def test_matrix() -> None:
     test_matrix_elements_4x4()
@@ -231,4 +298,3 @@ def test_matrix() -> None:
     test_submatrix_4x4()
     test_matrix_minor()
     test_matrix_cofactor()
-    
