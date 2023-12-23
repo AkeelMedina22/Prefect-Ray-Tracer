@@ -159,13 +159,58 @@ def test_matrix_determinant_2x2():
     assert m.determinant() == 17
 
 
-# @task
-# def test_submatrix_3x3():
-#     m = Matrix(3, 3, [[1, 5, 0], [-3, 2, 7], [0, 6, -3]])
-#     assert m.submatrix(0, 2) == Matrix(2, 2, [[-3, 2], [0, 6]])
-#     assert m.submatrix(1, 0) == Matrix(2, 2, [[5, 0], [6, -3]])
-#     assert m.submatrix(1, 2) == Matrix(2, 2, [[-3, 2], [0, 6]])
-#     assert m.submatrix(2, 1) == Matrix(2, 2, [[1, 5], [0, 6]])
+@task
+def test_submatrix_3x3():
+    m = Matrix(3, 3, [[1, 5, 0], [-3, 2, 7], [0, 6, -3]])
+    assert m.submatrix(0, 2) == Matrix(2, 2, [[-3, 2], [0, 6]])
+
+
+@task
+def test_submatrix_4x4():
+    m = Matrix(
+        4,
+        4,
+        [
+            [-6, 1, 1, 6],
+            [-8, 5, 8, 6],
+            [-1, 0, 8, 2],
+            [-7, 1, -1, 1],
+        ],
+    )
+    assert m.submatrix(2, 1) == Matrix(3, 3, [[-6, 1, 6], [-8, 8, 6], [-7, -1, 1]])
+
+
+@task
+def test_matrix_minor():
+    m = Matrix(
+        3,
+        3,
+        [
+            [3, 5, 0],
+            [2, -1, -7],
+            [6, -1, 5],
+        ],
+    )
+    submatrix = m.submatrix(1, 0)
+    assert submatrix.determinant() == 25
+    assert m.minor(1, 0) == 25
+
+
+@task
+def test_matrix_cofactor():
+    m = Matrix(
+        3,
+        3,
+        [
+            [3, 5, 0],
+            [2, -1, -7],
+            [6, -1, 5],
+        ],
+    )
+    assert m.minor(0, 0) == -12
+    assert m.cofactor(0, 0) == -12
+    assert m.minor(1, 0) == 25
+    assert m.cofactor(1, 0) == -25
 
 
 @flow(task_runner=RayTaskRunner(init_kwargs={"num_cpus": NUM_CPUS}))
@@ -181,5 +226,9 @@ def test_matrix() -> None:
     test_matrix_multiplication_by_identity_matrix_opposite()
     test_matrix_transposition()
     test_matrix_transposition_identity()
-    # test_matrix_determinant_2x2()
-    # test_submatrix_3x3()
+    test_matrix_determinant_2x2()
+    test_submatrix_3x3()
+    test_submatrix_4x4()
+    test_matrix_minor()
+    test_matrix_cofactor()
+    

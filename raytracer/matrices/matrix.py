@@ -65,3 +65,39 @@ class Matrix:
             self.rows,
             [[self.elements[row][column] for row in range(self.rows)] for column in range(self.columns)],
         )
+
+    def determinant(self):
+        if self.rows != self.columns:
+            raise ValueError("Cannot calculate determinant of non-square matrix")
+
+        if self.rows == 2:
+            return self.elements[0][0] * self.elements[1][1] - self.elements[0][1] * self.elements[1][0]
+
+        return sum(
+            self.elements[0][column] * self.cofactor(0, column)
+            for column in range(self.columns)
+        )
+
+    def submatrix(self, row: int, column: int):
+        return Matrix(
+            self.rows - 1,
+            self.columns - 1,
+            [
+                [
+                    self.elements[i][j]
+                    for j in range(self.columns)
+                    if j != column
+                ]
+                for i in range(self.rows)
+                if i != row
+            ],
+        )
+
+    def minor(self, row: int, column: int):
+        return self.submatrix(row, column).determinant()
+
+    def cofactor(self, row: int, column: int):
+        return self.minor(row, column) * (-1 if (row + column) % 2 else 1)
+
+    def is_invertible(self):
+        return self.determinant() != 0
