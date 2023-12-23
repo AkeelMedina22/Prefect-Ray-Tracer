@@ -1,3 +1,4 @@
 # raytracer/utils/__init__.py
 
-from .float_compare import float_equal
+from .utils import float_equal
+from .utils import identity_matrix
