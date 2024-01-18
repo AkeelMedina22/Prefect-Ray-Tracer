@@ -101,3 +101,21 @@ class Matrix:
 
     def is_invertible(self):
         return self.determinant() != 0
+
+    def inverse(self):
+        if not self.is_invertible():
+            raise ValueError("Matrix is not invertible")
+
+        determinant = self.determinant()
+
+        return Matrix(
+            self.rows,
+            self.columns,
+            [
+                [
+                    self.cofactor(row, column) / determinant
+                    for column in range(self.columns)
+                ]
+                for row in range(self.rows)
+            ],
+        ).transpose() # Matrix[col, row] = cofactor[row, col] / determinant
